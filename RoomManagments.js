@@ -4,8 +4,6 @@ class RoomManagments {
         this.guild = guild;
     }
 
-
-
     static async createCategory(guild, name) {
         if (!guild) return;
         const category = await guild.channels.create({
