@@ -1,18 +1,24 @@
-const { EmbedBuilder } = require('discord.js'); // تأكد من استيراد EmbedBuilder بشكل صحيح
+const { EmbedBuilder } = require('discord.js'); // EmbedBuilder like imports .
 const Party = require('./Party');
-
+const RoomManagments = require('./RoomManagments');
+const roomManagment = new RoomManagments();
 class PartyManager {
     constructor() {
         this.parties = new Map();
     }
 
-    createParty(leader) {
+    async createParty(leader, message) {
         if (this.parties.has(leader.id)) {
             return "You already have a party";
         }
 
         const newParty = new Party(leader);
         this.parties.set(leader.id, newParty);
+        const roomManagement = await RoomManagments.createCategory(message.guild, leader.username);
+        await roomManagement.addTextChannel(`${leader.username}-text`);
+        await roomManagement.addVoiceChannel(`${leader.username}-voice`);
+
+
         return "Your party has been created successfully";
     }
 
@@ -28,6 +34,13 @@ class PartyManager {
 
         return party.addMember(user);
     }
+    leaveMemberFromParty(user) {
+        const party = this.parties.get(user.id);
+        if (!party) return "You are not in party."
+        if (party.leader.id === user.id) return "set a Leader before leaving your party."
+        party.removeMember(user.id);
+        return `You left from ${party.leader.toString()}'s party.`
+    }
 
     removeMemberFromParty(leader, user) {
         const party = this.parties.get(leader.id);
@@ -42,7 +55,6 @@ class PartyManager {
         return party.removeMember(user);
     }
 
-    // دالة لعرض الأعضاء في الـ Embed
     showPartyMembersEmbed(leader) {
         const party = this.parties.get(leader.id);
         if (!party) {
