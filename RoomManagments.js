@@ -17,7 +17,6 @@ class RoomManagments {
     }
     async addTextChannel(name) {
         if (!this.category) return;
-
         const channel = await this.guild.channels.create({
             name,
             type: 0,
