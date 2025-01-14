@@ -60,7 +60,6 @@ class PartyManager {
         if (!party) {
             return "You don't have a party";
         }
-
         const partyMembers = party.members
             .filter(member => member.id !== leader.id) // استبعاد قائد الحفلة
             .map(member => member.toString())

@@ -4,7 +4,6 @@ class Party {
         this.leader = leader;
         this.members = [leader];
     }
-
     addMember(user){
         if (this.members.includes(user)) {
             return false;

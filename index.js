@@ -13,7 +13,6 @@ const client = new Client({
         GatewayIntentBits.MessageContent,
     ],
 });
-
 client.once('ready', () => {
     console.log("Online");
 });
